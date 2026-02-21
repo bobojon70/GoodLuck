@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Great-Jobs — Работа в Англии</title>
-    
+
     <script>
         ! function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
@@ -171,15 +171,15 @@
             color: #334155;
             padding: 16px 0 22px;
         }
-    
-        /* Смещение имени менеджера (работает для любых имён, т.к. меняется содержимое #mName) */
-        #mName{
+        /* Смещение имени менеджера */
+        
+        #mName {
             position: relative;
-            left: -14px; /* если нужно сильнее: -18px */
+            left: -14px;
         }
-
         /* Live counter */
-        .live-stats{
+        
+        .live-stats {
             margin: 16px auto 10px;
             width: min(720px, 92vw);
             padding: 10px 14px;
@@ -187,70 +187,74 @@
             background: rgba(255, 255, 255, .75);
             backdrop-filter: blur(10px);
         }
-        .live-stats__row{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:10px;
-            margin-bottom:8px;
+        
+        .live-stats__row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
         }
-        .live-stats__label{
-            font-size:14px;
-            color:#1f2a37;
-            font-weight:600;
+        
+        .live-stats__label {
+            font-size: 14px;
+            color: #1f2a37;
+            font-weight: 600;
         }
-        .live-stats__value{
-            font-size:16px;
-            font-weight:800;
-            color:#0f172a;
+        
+        .live-stats__value {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
         }
-        .live-stats__bar{
-            width:100%;
-            height:10px;
-            border-radius:999px;
+        
+        .live-stats__bar {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
             background: rgba(15, 23, 42, 0.12);
-            overflow:hidden;
+            overflow: hidden;
         }
-        .live-stats__fill{
-            height:100%;
-            width:42%;
-            border-radius:999px;
+        
+        .live-stats__fill {
+            height: 100%;
+            width: 42%;
+            border-radius: 999px;
             background: linear-gradient(90deg, #22c55e, #16a34a);
             transition: width .6s ease;
         }
-        .live-stats__hint{
-            margin-top:6px;
-            font-size:12px;
+        
+        .live-stats__hint {
+            margin-top: 6px;
+            font-size: 12px;
             color: rgba(15, 23, 42, 0.65);
         }
-
-    
         /* Mobile adaptation */
+        
         @media (max-width: 640px) {
-            .live-stats{
+            .live-stats {
                 width: 100%;
                 margin: 10px 0 12px;
                 padding: 8px 10px;
                 border-radius: 12px;
             }
-            .live-stats__label{
+            .live-stats__label {
                 font-size: 12px;
             }
-            .live-stats__value{
+            .live-stats__value {
                 font-size: 14px;
             }
-            .live-stats__bar{
+            .live-stats__bar {
                 height: 8px;
             }
-            .live-stats__hint{
+            .live-stats__hint {
                 font-size: 11px;
             }
-            /* tighter spacing around buttons */
-            .buttons, .btns {
+            .buttons,
+            .btns {
                 gap: 10px;
             }
         }
-
     </style>
 </head>
 
@@ -272,7 +276,6 @@
                     </div>
                     <div class="live-stats__hint">Обновляется в реальном времени</div>
                 </div>
-
 
                 <div class="buttons">
                     <a class="btn wa" id="wa">WhatsApp</a>
@@ -312,16 +315,19 @@
 
     <script>
         const MANAGER = {
-            name: "Тимур",
+            name: "Кирилл Вологдин",
             role: "Менеджер по подбору персонала",
-            whatsapp: "447547320274",
-            telegram: "great_jobs_manager"
+            whatsapp: "447526208400",
+            telegram: "ukbritejobs"
         };
 
         const wa = document.getElementById("wa");
         const tg = document.getElementById("tg");
-        wa.href = "https://wa.me/" + MANAGER.whatsapp;
-        tg.href = "https://t.me/" + MANAGER.telegram;
+
+        const message = "?text=Здравствуйте!%20Хочу%20участвовать%20в%20наборе.";
+
+        wa.href = "https://wa.me/" + MANAGER.whatsapp + message;
+        tg.href = "https://t.me/" + MANAGER.telegram + message;
 
         function track(e, name, url) {
             e.preventDefault();
@@ -338,41 +344,34 @@
         document.getElementById("y").textContent = new Date().getFullYear();
     </script>
 
-    
+    <script>
+        (function() {
+            const countEl = document.getElementById('appsCount');
+            const fillEl = document.getElementById('appsFill');
+            if (!countEl || !fillEl) return;
 
-<script>
-(function () {
-  const countEl = document.getElementById('appsCount');
-  const fillEl  = document.getElementById('appsFill');
-  if (!countEl || !fillEl) return;
+            let count = 23654;
+            let progress = 18;
 
-  let count = 23654;
-  let progress = 18; // старт низкий, чтобы очень медленно росло
+            const format = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
-  const format = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            function tick() {
+                const add = Math.floor(Math.random() * 4) + 1;
+                count += add;
 
-  function tick() {
-    // медленный, правдоподобный рост счётчика
-    const add = Math.floor(Math.random() * 4) + 1; // +1..4
-    count += add;
+                const delta = Math.random() * 1.2 + 0.2;
+                progress = Math.min(98, progress + delta);
 
-    // прогресс-бар ТОЛЬКО вперёд и очень медленно
-    const delta = Math.random() * 1.2 + 0.2; // +0.2..+1.4%
-    progress = Math.min(98, progress + delta); // не доходит до 100%
+                countEl.textContent = format(count);
+                fillEl.style.width = progress.toFixed(0) + '%';
 
-    countEl.textContent = format(count);
-    fillEl.style.width = progress.toFixed(0) + '%';
+                const next = Math.floor(Math.random() * 20000) + 15000;
+                setTimeout(tick, next);
+            }
 
-    // апдейт редко: 15–35 сек
-    const next = Math.floor(Math.random() * 20000) + 15000;
-    setTimeout(tick, next);
-  }
-
-  setTimeout(tick, 2500);
-})();
-</script>
-
-
+            setTimeout(tick, 2500);
+        })();
+    </script>
 
 </body>
 
