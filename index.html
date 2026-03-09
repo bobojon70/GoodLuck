@@ -171,13 +171,11 @@
             color: #334155;
             padding: 16px 0 22px;
         }
-        /* Смещение имени менеджера */
         
         #mName {
             position: relative;
             left: -14px;
         }
-        /* Live counter */
         
         .live-stats {
             margin: 16px auto 10px;
@@ -229,7 +227,6 @@
             font-size: 12px;
             color: rgba(15, 23, 42, 0.65);
         }
-        /* Mobile adaptation */
         
         @media (max-width: 640px) {
             .live-stats {
@@ -283,9 +280,9 @@
                 </div>
 
                 <div class="manager">
-                    <img id="mPhoto" src="img/manager.jpg">
+                    <img id="mPhoto" src="img/manager-1.jpg">
                     <div>
-                        <b id="mName">Александр</b>
+                        <b id="mName">Менеджер</b>
                         <span id="mRole">Менеджер по подбору персонала</span>
                     </div>
                 </div>
@@ -314,34 +311,70 @@
     </div>
 
     <script>
-        const MANAGER = {
-            name: "Тимур",
-            role: "Менеджер по подбору персонала",
-            whatsapp: "447547320274",
-            telegram: "greatjobs_manager"
-        };
+        // 1. База ваших 3 менеджеров (номера и ники очищены от лишних символов)
+        const MANAGERS = [
+            { 
+                name: "Алексей", 
+                role: "Менеджер по подбору персонала", 
+                photo: "img/manager-1.jpg", 
+                whatsapp: "447751408417", 
+                telegram: "Join_uk_job" 
+            },
+            { 
+                name: "Руслан", 
+                role: "Менеджер по подбору персонала", 
+                photo: "img/manager-2.jpg", 
+                whatsapp: "447892807399", 
+                telegram: "kirillgreatjobs" 
+            },
+            { 
+                name: "Мурат", 
+                role: "Менеджер по подбору персонала", 
+                photo: "img/manager-3.jpg", 
+                whatsapp: "447490930013", 
+                telegram: "Great_JobsMurat_HR" 
+            }
+        ];
 
+        // 2. Выбираем случайного менеджера из 3
+        const MANAGER = MANAGERS[Math.floor(Math.random() * MANAGERS.length)];
+
+        // Находим нужные элементы на странице
         const wa = document.getElementById("wa");
         const tg = document.getElementById("tg");
+        const mName = document.getElementById("mName");
+        const mRole = document.getElementById("mRole");
+        const mPhoto = document.getElementById("mPhoto");
+        const y = document.getElementById("y");
 
-        const message = "?text=Здравствуйте!%20Хочу%20участвовать%20в%20наборе.";
+        // 3. Формируем ссылки
+        const waText = encodeURIComponent("Здравствуйте! Хочу участвовать в наборе.");
+        
+        // Бронебойная ссылка WhatsApp + обычная Telegram
+        wa.href = "https://api.whatsapp.com/send?phone=" + MANAGER.whatsapp + "&text=" + waText;
+        tg.href = "https://t.me/" + MANAGER.telegram;
 
-        wa.href = "https://wa.me/" + MANAGER.whatsapp + message;
-        tg.href = "https://t.me/" + MANAGER.telegram + message;
+        // 4. Подставляем данные менеджера
+        mName.textContent = MANAGER.name;
+        mRole.textContent = MANAGER.role;
+        if (mPhoto) mPhoto.src = MANAGER.photo;
+        
+        // Обновляем год в футере
+        if (y) y.textContent = new Date().getFullYear();
 
+        // 5. Функция для отслеживания Пикселя с задержкой перехода
         function track(e, name, url) {
-            e.preventDefault();
-            if (window.fbq) fbq('track', 'Lead', {
-                channel: name
-            });
+            e.preventDefault(); // Останавливаем мгновенный переход
+            if (window.fbq) {
+                fbq('track', 'Lead', { channel: name });
+            }
+            // Ждем 200 миллисекунд (чтобы пиксель улетел) и переходим по ссылке
             setTimeout(() => location.href = url, 200);
         }
+
+        // Вешаем функцию Пикселя на клики по кнопкам
         wa.onclick = e => track(e, "WhatsApp", wa.href);
         tg.onclick = e => track(e, "Telegram", tg.href);
-
-        document.getElementById("mName").textContent = MANAGER.name;
-        document.getElementById("mRole").textContent = MANAGER.role;
-        document.getElementById("y").textContent = new Date().getFullYear();
     </script>
 
     <script>
