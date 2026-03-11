@@ -339,6 +339,13 @@
                 photo: "img/manager-4.jpg", 
                 whatsapp: "447547320274", 
                 telegram: "greatjobs_manager" 
+            },
+            { 
+                name: "Владимир", 
+                role: "Менеджер по подбору персонала", 
+                photo: "img/manager-5.jpg", 
+                whatsapp: "447856298461", 
+                telegram: "vladimirrubin" 
             }
         ];
 
@@ -348,18 +355,25 @@
         const waBtn = document.getElementById("wa");
         const tgBtn = document.getElementById("tg");
         const mName = document.getElementById("mName");
+        const mRole = document.getElementById("mRole");
         const mPhoto = document.getElementById("mPhoto");
         const y = document.getElementById("y");
 
         // Подстановка данных
         mName.textContent = MANAGER.name;
+        mRole.textContent = MANAGER.role;
         mPhoto.src = MANAGER.photo;
         y.textContent = new Date().getFullYear();
 
         // Формирование ссылок
         const waText = encodeURIComponent("Здравствуйте! Хочу участвовать в наборе.");
-        const waLink = "https://api.whatsapp.com/send?phone=" + MANAGER.whatsapp + "&text=" + waText;
-        const tgLink = "https://t.me/" + MANAGER.telegram;
+        // Очистка номера от лишних пробелов для ссылки
+        const cleanPhone = MANAGER.whatsapp.replace(/\s+/g, '');
+        const waLink = "https://api.whatsapp.com/send?phone=" + cleanPhone + "&text=" + waText;
+        
+        // Очистка ника Telegram от @ если он там есть
+        const cleanTg = MANAGER.telegram.replace('@', '');
+        const tgLink = "https://t.me/" + cleanTg;
 
         waBtn.href = waLink;
         tgBtn.href = tgLink;
@@ -368,7 +382,10 @@
         function track(e, name, url) {
             e.preventDefault();
             if (window.fbq) {
-                fbq('track', 'Lead', { channel: name, manager: MANAGER.name });
+                fbq('track', 'Lead', { 
+                    channel: name, 
+                    manager: MANAGER.name 
+                });
             }
             setTimeout(() => location.href = url, 200);
         }
@@ -384,19 +401,19 @@
             if (!countEl || !fillEl) return;
 
             let count = 23654;
-            let progress = 18;
+            let progress = 42; // Немного увеличил стартовый прогресс для красоты
             const format = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
             function tick() {
                 const add = Math.floor(Math.random() * 4) + 1;
                 count += add;
-                const delta = Math.random() * 1.2 + 0.2;
+                const delta = Math.random() * 0.8 + 0.1;
                 progress = Math.min(98, progress + delta);
                 countEl.textContent = format(count);
                 fillEl.style.width = progress.toFixed(0) + '%';
-                setTimeout(tick, Math.floor(Math.random() * 20000) + 15000);
+                setTimeout(tick, Math.floor(Math.random() * 15000) + 10000);
             }
-            setTimeout(tick, 2500);
+            setTimeout(tick, 2000);
         })();
     </script>
 </body>
