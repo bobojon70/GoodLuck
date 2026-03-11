@@ -280,9 +280,9 @@
                 </div>
 
                 <div class="manager">
-                    <img id="mPhoto" src="img/manager-1.jpg">
+                    <img id="mPhoto" src="">
                     <div>
-                        <b id="mName">Менеджер</b>
+                        <b id="mName">Загрузка...</b>
                         <span id="mRole">Менеджер по подбору персонала</span>
                     </div>
                 </div>
@@ -311,7 +311,6 @@
     </div>
 
     <script>
-        // 1. База ваших 3 менеджеров (номера и ники очищены от лишних символов)
         const MANAGERS = [
             { 
                 name: "Алексей", 
@@ -333,48 +332,49 @@
                 photo: "img/manager-3.jpg", 
                 whatsapp: "447783555240", 
                 telegram: "Great_JobsMurat_HR" 
+            },
+            { 
+                name: "Тимур", 
+                role: "Менеджер по подбору персонала", 
+                photo: "img/manager-4.jpg", 
+                whatsapp: "447547320274", 
+                telegram: "greatjobs_manager" 
             }
         ];
 
-        // 2. Выбираем случайного менеджера из 3
+        // Рулетка: выбор менеджера
         const MANAGER = MANAGERS[Math.floor(Math.random() * MANAGERS.length)];
 
-        // Находим нужные элементы на странице
-        const wa = document.getElementById("wa");
-        const tg = document.getElementById("tg");
+        const waBtn = document.getElementById("wa");
+        const tgBtn = document.getElementById("tg");
         const mName = document.getElementById("mName");
-        const mRole = document.getElementById("mRole");
         const mPhoto = document.getElementById("mPhoto");
         const y = document.getElementById("y");
 
-        // 3. Формируем ссылки
-        const waText = encodeURIComponent("Здравствуйте! Хочу участвовать в наборе.");
-        
-        // Бронебойная ссылка WhatsApp + обычная Telegram
-        wa.href = "https://api.whatsapp.com/send?phone=" + MANAGER.whatsapp + "&text=" + waText;
-        tg.href = "https://t.me/" + MANAGER.telegram;
-
-        // 4. Подставляем данные менеджера
+        // Подстановка данных
         mName.textContent = MANAGER.name;
-        mRole.textContent = MANAGER.role;
-        if (mPhoto) mPhoto.src = MANAGER.photo;
-        
-        // Обновляем год в футере
-        if (y) y.textContent = new Date().getFullYear();
+        mPhoto.src = MANAGER.photo;
+        y.textContent = new Date().getFullYear();
 
-        // 5. Функция для отслеживания Пикселя с задержкой перехода
+        // Формирование ссылок
+        const waText = encodeURIComponent("Здравствуйте! Хочу участвовать в наборе.");
+        const waLink = "https://api.whatsapp.com/send?phone=" + MANAGER.whatsapp + "&text=" + waText;
+        const tgLink = "https://t.me/" + MANAGER.telegram;
+
+        waBtn.href = waLink;
+        tgBtn.href = tgLink;
+
+        // Пиксель с задержкой
         function track(e, name, url) {
-            e.preventDefault(); // Останавливаем мгновенный переход
+            e.preventDefault();
             if (window.fbq) {
-                fbq('track', 'Lead', { channel: name });
+                fbq('track', 'Lead', { channel: name, manager: MANAGER.name });
             }
-            // Ждем 200 миллисекунд (чтобы пиксель улетел) и переходим по ссылке
             setTimeout(() => location.href = url, 200);
         }
 
-        // Вешаем функцию Пикселя на клики по кнопкам
-        wa.onclick = e => track(e, "WhatsApp", wa.href);
-        tg.onclick = e => track(e, "Telegram", tg.href);
+        waBtn.onclick = e => track(e, "WhatsApp", waLink);
+        tgBtn.onclick = e => track(e, "Telegram", tgLink);
     </script>
 
     <script>
@@ -385,27 +385,19 @@
 
             let count = 23654;
             let progress = 18;
-
             const format = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
             function tick() {
                 const add = Math.floor(Math.random() * 4) + 1;
                 count += add;
-
                 const delta = Math.random() * 1.2 + 0.2;
                 progress = Math.min(98, progress + delta);
-
                 countEl.textContent = format(count);
                 fillEl.style.width = progress.toFixed(0) + '%';
-
-                const next = Math.floor(Math.random() * 20000) + 15000;
-                setTimeout(tick, next);
+                setTimeout(tick, Math.floor(Math.random() * 20000) + 15000);
             }
-
             setTimeout(tick, 2500);
         })();
     </script>
-
 </body>
-
 </html>
